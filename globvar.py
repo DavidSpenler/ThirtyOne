@@ -1,0 +1,11 @@
+def init():
+	global window
+	global batch
+	global board
+	global bottom
+	global back
+	global front
+	global dobjects
+	global WinMSG
+	global Game
+	global Knock
