@@ -1,11 +1,11 @@
 import pyglet
+
 import random
-import globvar
 
 from player import player
 from computer import computer
 from card import card
-from winmsg import winmsg
+import global_vars
 
 class game():
 
@@ -82,7 +82,7 @@ class game():
                 self.newturn = 'r'+str(self.turn)
             elif cardt == self.bottom:
                 for player in self.players:
-                    if 'observedr' in dir(player) and int(self.turn) != Game.players.index(player):
+                    if 'observedr' in dir(player) and int(self.turn) != global_vars.Game.players.index(player):
                         player.observedr(int(self.turn),cardt)
                 #print('bottom card')
                 self.bottom.goal = (self.players[self.turn].cardp[3][0],self.players[self.turn].cardp[3][1],self.players[self.turn].cardp[3][2],10.5)
@@ -91,7 +91,7 @@ class game():
                 self.bottom = None
         elif str(self.turn)[0] == 'r' and self.turn == self.newturn and cardt in self.players[int(str(self.turn)[1])].cards[:3]:
             for player in self.players:
-                if 'observedi' in dir(player) and int(self.turn[1]) != Game.players.index(player):
+                if 'observedi' in dir(player) and int(self.turn[1]) != global_vars.Game.players.index(player):
                     player.observedi(int(self.turn[1]),cardt)
             self.players[int(self.turn[-1:])].cards[3].goal = cardt.goal
             self.players[int(self.turn[-1:])].cards[3].faceup = False
@@ -104,7 +104,7 @@ class game():
                 if self.behind != None:
                     self.behind.sprite.batch = None
                 self.behind = self.bottom
-                self.behind.sprite.group = globvar.bottom
+                self.behind.sprite.group = global_vars.bottom
             self.bottom = cardt
             if self.bottom != None:
                 pass
@@ -116,7 +116,7 @@ class game():
             
 
     def moving(self):
-        for object in globvar.dobjects:
+        for object in global_vars.dobjects:
             if object.moving or object.lastcard != None:
                 return True
         return False
@@ -130,7 +130,7 @@ class game():
             self.newturn = self.turn
         #print(self.turn)
         self.knocked = True
-        globvar.Knock.hide()
+        global_vars.Knock.hide()
         self.hand = self.players[player].cards
         self.sum = 0
         for card in self.hand:
@@ -192,16 +192,16 @@ class game():
             if self.sum[0] > self.wsum:
                 self.wsum = self.sum[0]
                 self.winner = self.players.index(player)
-                globvar.batch.draw()
-        globvar.WinMSG.winner = self.winner
+                global_vars.batch.draw()
+        global_vars.WinMSG.winner = self.winner
         print('Player ',self.winner+1,' wins!')
         self.turn = 'en'
         self.newturn = 'en'
 
     def update(self,dt):
         ##print(self.turn)
-        globvar.window.clear()
-        for object in globvar.dobjects:
+        global_vars.window.clear()
+        for object in global_vars.dobjects:
             object.move()
         if self.turn == self.lastturn and self.knocked == True and self.moving() == False:
             self.win()
@@ -209,7 +209,7 @@ class game():
             self.turn = self.newturn
             if self.turn == 0 and self.const < 5:
                 self.const+=0.3
-        if globvar.WinMSG.winner != None:
-            globvar.WinMSG.show()
+        if global_vars.WinMSG.winner != None:
+            global_vars.WinMSG.show()
         for p in range(1,len(self.players)):
             self.players[p].think()

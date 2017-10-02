@@ -1,11 +1,13 @@
 import pyglet
+
 import math
-import globvar
+
+import global_vars
 
 class card():
 
     def __init__(self,x,y,r,gx,gy,gr,gt,type,lastcard,faceup):
-        self.sprite = pyglet.sprite.Sprite(pyglet.resource.image('fd.png'),batch=globvar.batch, group=globvar.back)
+        self.sprite = pyglet.sprite.Sprite(pyglet.resource.image('fd.png'),batch=global_vars.batch, group=global_vars.back)
         self.sprite.image.anchor_x = self.sprite.image.width/2
         self.sprite.image.anchor_y = self.sprite.image.height/2
         self.sprite.x = x
@@ -16,14 +18,14 @@ class card():
         self.faceup = faceup
         self.type = type
         self.lastcard = lastcard
-        globvar.dobjects.append(self)
-        print(type)
+        global_vars.dobjects.append(self)
+        #print(type)
 
     def move(self):
         if (self.sprite.x != self.goal[0] or self.sprite.y != self.goal[1]) and (self.lastcard == None):
             if self.moving == False:
                 self.moving = True
-                self.sprite.group = globvar.front
+                self.sprite.group = global_vars.front
                 self.distx = self.goal[0]-self.sprite.x
                 self.disty = self.goal[1]-self.sprite.y
                 self.dist = math.sqrt(self.distx**2+self.disty**2)
@@ -65,14 +67,14 @@ class card():
                 self.sprite.y+=self.speedy
         elif self.sprite.x == self.goal[0] and self.sprite.y == self.goal[1] and self.moving == True:
             self.moving = False
-            self.sprite.group = globvar.back
+            self.sprite.group = global_vars.back
             self.flip()
-            for object in globvar.dobjects:
+            for object in global_vars.dobjects:
                 if object.lastcard == self:
                     object.lastcard = None
 
     def flip(self):
-        if self in globvar.Game.players[0].cards:
+        if self in global_vars.Game.players[0].cards:
             self.faceup = True
         if self.faceup == True:
             self.sprite.image = pyglet.resource.image(self.type+'.png')
@@ -83,13 +85,11 @@ class card():
         self.sprite.image.anchor_y = self.sprite.image.height/2
         self.sprite.x = self.sprite.x
         self.sprite.y = self.sprite.y
-
     def choose(self):
-        if globvar.Game.turn == 'p0':
-            if globvar.Game.top == self:
+        if global_vars.Game.turn == 'p0':
+            if global_vars.Game.top == self:
                 pass
-				#used to be game.bottom
-            elif globvar.Game.bottom == self:
+            elif game.bottom == self:
                 pass
-            elif self in globvar.Game.players[0].cards:
+            elif self in global_vars.Game.players[0].cards:
                 pass

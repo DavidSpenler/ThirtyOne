@@ -1,5 +1,6 @@
 import pyglet
-import globvar
+
+import global_vars
 
 class player():
 
